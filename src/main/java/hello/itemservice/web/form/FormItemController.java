@@ -9,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -41,7 +43,8 @@ public class FormItemController {
 
     @PostMapping("/add")
     public String addItem(@ModelAttribute Item item, RedirectAttributes redirectAttributes) {
-        log.info("item.open={}", item.getOpen());
+        //log.info("item.open={}", item.getOpen());
+        log.info("item.regions={}", item.getRegions());
         Item savedItem = itemRepository.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("status", true);
@@ -61,5 +64,17 @@ public class FormItemController {
         return "redirect:/form/items/{itemId}";
     }
 
+    /*
+        @ModelAttribute 애노테이션의 추가 기능 ->
+        어떤 컨트롤러에서 호출이 되건 모델에 데이터를 담아서 전달할 수 있음.
+     */
+    @ModelAttribute("regions")
+    public Map<String, String> regions() {
+        Map<String, String> regions = new LinkedHashMap<>();
+        regions.put("SEOUL", "서울");
+        regions.put("BUSAN", "부산");
+        regions.put("JEJU", "제주");
+        return regions;
+    }
 }
 
